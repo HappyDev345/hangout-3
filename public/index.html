@@ -1,129 +1,143 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1" />
-  <title>Group Availability Scheduler</title>
-  <style>
-    body {
-      font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-      max-width: 900px;
-      margin: 20px auto;
-      padding: 0 15px;
-      background: #f9f9f9;
-      color: #333;
-    }
-    h1 {
-      text-align: center;
-      color: #00796b;
-    }
-    form {
-      margin-bottom: 30px;
-    }
-    .day-block {
-      margin-bottom: 25px;
-      border: 1px solid #ddd;
-      border-radius: 8px;
-      background: white;
-      padding: 12px 15px;
-      box-shadow: 0 2px 6px rgb(0 0 0 / 0.1);
-    }
-    .day-title {
-      font-weight: 700;
-      margin-bottom: 10px;
-      color: #004d40;
-    }
-    .time-blocks {
-      display: flex;
-      gap: 10px;
-      flex-wrap: wrap;
-    }
-    .time-label {
-      flex: 1 1 110px;
-      padding: 8px 12px;
-      background: #e0f2f1;
-      border-radius: 6px;
-      cursor: pointer;
-      user-select: none;
-      text-align: center;
-      border: 2px solid transparent;
-      transition: background-color 0.3s, border-color 0.3s;
-      font-weight: 600;
-      color: #004d40;
-    }
-    .time-label:hover {
-      background: #b2dfdb;
-    }
-    input[type="checkbox"] {
-      display: none;
-    }
-    input[type="checkbox"]:checked + .time-label {
-      background: #00796b;
-      color: white;
-      border-color: #004d40;
-    }
-    #name {
-      width: 100%;
-      max-width: 320px;
-      padding: 8px 12px;
-      font-size: 16px;
-      margin-bottom: 15px;
-      border: 1.5px solid #ccc;
-      border-radius: 6px;
-      outline-offset: 2px;
-      transition: border-color 0.3s;
-    }
-    #name:focus {
-      border-color: #00796b;
-    }
-    button {
-      padding: 12px 22px;
-      font-size: 18px;
-      border: none;
-      border-radius: 8px;
-      background: #00796b;
-      color: white;
-      cursor: pointer;
-      font-weight: 700;
-      box-shadow: 0 3px 7px rgb(0 121 107 / 0.6);
-      transition: background-color 0.3s;
-    }
-    button:hover {
-      background: #004d40;
-    }
-    #results {
-      margin-top: 30px;
-      background: white;
-      padding: 20px 25px;
-      border-radius: 8px;
-      box-shadow: 0 2px 6px rgb(0 0 0 / 0.1);
-    }
-    ul {
-      padding-left: 20px;
-    }
-    .best-times li {
-      color: #00796b;
-      font-weight: 600;
-      margin-bottom: 8px;
-      display: flex;
-      justify-content: space-between;
-      border-bottom: 1px solid #e0f2f1;
-      padding-bottom: 4px;
-    }
-    .admin {
-      margin-top: 40px;
-      border-top: 1px solid #ccc;
-      padding-top: 20px;
-      text-align: center;
-    }
-    .admin button {
-      background: #c62828;
-      box-shadow: 0 3px 7px rgb(198 40 40 / 0.6);
-    }
-    .admin button:hover {
-      background: #8e0000;
-    }
-  </style>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>Group Availability Scheduler</title>
+<style>
+  body {
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    max-width: 900px;
+    margin: 20px auto;
+    padding: 0 15px;
+    background: #f9f9f9;
+    color: #333;
+  }
+  h1 {
+    text-align: center;
+    color: #00796b;
+  }
+  form {
+    margin-bottom: 30px;
+  }
+  .day-block {
+    margin-bottom: 25px;
+    border: 1px solid #ddd;
+    border-radius: 8px;
+    background: white;
+    padding: 12px 15px;
+    box-shadow: 0 2px 6px rgb(0 0 0 / 0.1);
+  }
+  .day-title {
+    font-weight: 700;
+    margin-bottom: 10px;
+    color: #004d40;
+  }
+  .time-blocks {
+    display: flex;
+    gap: 10px;
+    flex-wrap: wrap;
+  }
+  .time-label {
+    flex: 1 1 110px;
+    padding: 8px 12px;
+    background: #e0f2f1;
+    border-radius: 6px;
+    cursor: pointer;
+    user-select: none;
+    text-align: center;
+    border: 2px solid transparent;
+    transition: background-color 0.3s, border-color 0.3s;
+    font-weight: 600;
+    color: #004d40;
+  }
+  .time-label:hover {
+    background: #b2dfdb;
+  }
+  input[type="checkbox"] {
+    display: none;
+  }
+  input[type="checkbox"]:checked + .time-label {
+    background: #00796b;
+    color: white;
+    border-color: #004d40;
+  }
+  #name {
+    width: 100%;
+    max-width: 320px;
+    padding: 8px 12px;
+    font-size: 16px;
+    margin-bottom: 15px;
+    border: 1.5px solid #ccc;
+    border-radius: 6px;
+    outline-offset: 2px;
+    transition: border-color 0.3s;
+  }
+  #name:focus {
+    border-color: #00796b;
+  }
+  button {
+    padding: 12px 22px;
+    font-size: 18px;
+    border: none;
+    border-radius: 8px;
+    background: #00796b;
+    color: white;
+    cursor: pointer;
+    font-weight: 700;
+    box-shadow: 0 3px 7px rgb(0 121 107 / 0.6);
+    transition: background-color 0.3s;
+  }
+  button:hover {
+    background: #004d40;
+  }
+  #results {
+    margin-top: 30px;
+    background: white;
+    padding: 20px 25px;
+    border-radius: 8px;
+    box-shadow: 0 2px 6px rgb(0 0 0 / 0.1);
+  }
+  .best-times li {
+    color: #00796b;
+    font-weight: 700;
+    margin-bottom: 6px;
+  }
+  .collapsible {
+    cursor: pointer;
+    padding: 10px;
+    background: #e0f2f1;
+    border-radius: 6px;
+    font-weight: 600;
+    color: #004d40;
+    border: 1px solid #ccc;
+    margin-top: 10px;
+  }
+  .collapsible:hover {
+    background-color: #b2dfdb;
+  }
+  .content {
+    padding: 10px 20px;
+    display: none;
+    overflow: hidden;
+    background-color: #f1f1f1;
+    border-radius: 6px;
+    margin-bottom: 10px;
+  }
+  .admin {
+    margin-top: 40px;
+    border-top: 1px solid #ccc;
+    padding-top: 20px;
+    text-align: center;
+  }
+  .admin button {
+    background: #c62828;
+    box-shadow: 0 3px 7px rgb(198 40 40 / 0.6);
+  }
+  .admin button:hover {
+    background: #8e0000;
+  }
+</style>
 </head>
 <body>
   <h1>Group Availability Scheduler</h1>
@@ -141,151 +155,127 @@
     <button id="reset-btn">Reset All Availability (Luke Only)</button>
   </div>
 
-  <script>
-    const timeslotsContainer = document.getElementById('timeslots-container');
-    const startDate = new Date(2025, 6, 9); // July 9, 2025
-    const endDate = new Date(2025, 6, 27); // July 27, 2025
-    const twoHourBlocks = [
-      '10 AM - 12 PM',
-      '12 PM - 2 PM',
-      '2 PM - 4 PM',
-      '4 PM - 6 PM',
-    ];
+<script>
+  const timeslotsContainer = document.getElementById('timeslots-container');
+  const startDate = new Date(2025, 6, 9);
+  const endDate = new Date(2025, 6, 27);
+  const twoHourBlocks = ['10 AM - 12 PM', '12 PM - 2 PM', '2 PM - 4 PM', '4 PM - 6 PM'];
 
-    function formatDate(d) {
-      return d.toLocaleDateString('en-GB', {
-        weekday: 'long',
-        day: 'numeric',
-        month: 'short'
+  function formatDate(d) {
+    return d.toLocaleDateString('en-GB', { weekday: 'long', day: 'numeric', month: 'short' });
+  }
+
+  for (let d = new Date(startDate); d <= endDate; d.setDate(d.getDate() + 1)) {
+    const dayBlock = document.createElement('div');
+    dayBlock.className = 'day-block';
+    const dayTitle = document.createElement('div');
+    dayTitle.className = 'day-title';
+    dayTitle.textContent = formatDate(new Date(d));
+    dayBlock.appendChild(dayTitle);
+    const timeBlocksDiv = document.createElement('div');
+    timeBlocksDiv.className = 'time-blocks';
+    twoHourBlocks.forEach(block => {
+      const slotValue = `${formatDate(new Date(d))} ${block}`;
+      const checkbox = document.createElement('input');
+      checkbox.type = 'checkbox';
+      checkbox.id = slotValue;
+      checkbox.name = 'availability';
+      checkbox.value = slotValue;
+      const label = document.createElement('label');
+      label.className = 'time-label';
+      label.htmlFor = slotValue;
+      label.textContent = block;
+      timeBlocksDiv.appendChild(checkbox);
+      timeBlocksDiv.appendChild(label);
+    });
+    dayBlock.appendChild(timeBlocksDiv);
+    timeslotsContainer.appendChild(dayBlock);
+  }
+
+  const form = document.getElementById('availability-form');
+  const resultsDiv = document.getElementById('results');
+  const resetBtn = document.getElementById('reset-btn');
+
+  form.addEventListener('submit', async (e) => {
+    e.preventDefault();
+    const name = document.getElementById('name').value.trim();
+    const checkedBoxes = [...document.querySelectorAll('input[name="availability"]:checked')];
+    if (!name) return alert('Please enter your name.');
+    if (checkedBoxes.length === 0) return alert('Please select at least one time block.');
+    const availability = checkedBoxes.map(cb => cb.value);
+    try {
+      const res = await fetch('/submit', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ name, availability }),
       });
+      const data = await res.json();
+      alert(data.message);
+      form.reset();
+      loadResults();
+    } catch {
+      alert('Error submitting availability! Please contact Luke');
     }
+  });
 
-    // Create day sections
-    for (let d = new Date(startDate); d <= endDate; d.setDate(d.getDate() + 1)) {
-      const dayBlock = document.createElement('div');
-      dayBlock.className = 'day-block';
-
-      const dayTitle = document.createElement('div');
-      dayTitle.className = 'day-title';
-      dayTitle.textContent = formatDate(new Date(d));
-      dayBlock.appendChild(dayTitle);
-
-      const timeBlocksDiv = document.createElement('div');
-      timeBlocksDiv.className = 'time-blocks';
-
-      twoHourBlocks.forEach(block => {
-        const slotValue = `${formatDate(new Date(d))} ${block}`;
-
-        const checkbox = document.createElement('input');
-        checkbox.type = 'checkbox';
-        checkbox.id = slotValue;
-        checkbox.name = 'availability';
-        checkbox.value = slotValue;
-
-        const label = document.createElement('label');
-        label.className = 'time-label';
-        label.htmlFor = slotValue;
-        label.textContent = block;
-
-        timeBlocksDiv.appendChild(checkbox);
-        timeBlocksDiv.appendChild(label);
-      });
-
-      dayBlock.appendChild(timeBlocksDiv);
-      timeslotsContainer.appendChild(dayBlock);
-    }
-
-    const form = document.getElementById('availability-form');
-    const resultsDiv = document.getElementById('results');
-    const resetBtn = document.getElementById('reset-btn');
-
-    form.addEventListener('submit', async (e) => {
-      e.preventDefault();
-      const name = document.getElementById('name').value.trim();
-      const checkedBoxes = [...document.querySelectorAll('input[name="availability"]:checked')];
-
-      if (!name) {
-        alert('Please enter your name.');
+  async function loadResults() {
+    try {
+      const res = await fetch('/results');
+      const data = await res.json();
+      if (data.bestTimes.length === 0) {
+        resultsDiv.innerHTML = '<h2>No availability submitted yet.</h2>';
         return;
       }
-      if (checkedBoxes.length === 0) {
-        alert('Please select at least one time block.');
-        return;
-      }
+      const bestTimesHtml = data.bestTimes
+        .slice(0, 5)
+        .map(({ slot, count }) => `<li>${slot} — <b>${count} people</b></li>`)
+        .join('');
 
-      const availability = checkedBoxes.map(cb => cb.value);
-      try {
-        const res = await fetch('/submit', {
-          method: 'POST',
-          headers: { 'Content-Type': 'application/json' },
-          body: JSON.stringify({ name, availability })
+      const allAvailHtml = data.availabilities.map(u => `
+        <div>
+          <div class="collapsible">${u.name}</div>
+          <div class="content"><p>${u.availability.join('<br>')}</p></div>
+        </div>
+      `).join('');
+
+      resultsDiv.innerHTML = `
+        <h2>Top 5 Best Times to Meet:</h2>
+        <ul class="best-times">${bestTimesHtml}</ul>
+        <h2>All Submissions:</h2>
+        ${allAvailHtml}
+      `;
+
+      // Collapsible script
+      document.querySelectorAll('.collapsible').forEach(btn => {
+        btn.addEventListener('click', () => {
+          const content = btn.nextElementSibling;
+          content.style.display = content.style.display === 'block' ? 'none' : 'block';
         });
-        const data = await res.json();
-        alert(data.message);
-        form.reset();
-        loadResults();
-      } catch {
-        alert('Error submitting availability! Please contact Luke.');
-      }
-    });
+      });
 
-    async function loadResults() {
-      try {
-        const res = await fetch('/results');
-        const data = await res.json();
-
-        if (data.bestTimes.length === 0) {
-          resultsDiv.innerHTML = '<h2>No availability submitted yet.</h2>';
-          return;
-        }
-
-        const bestSlotCounts = data.bestTimes.map(label => {
-          const match = label.match(/\((\d+) people\)$/);
-          const count = match ? parseInt(match[1], 10) : 0;
-          const timeText = label.replace(/\s\(\d+ people\)$/, '');
-          return { timeText, count };
-        });
-
-        bestSlotCounts.sort((a, b) => b.count - a.count);
-        const top5 = bestSlotCounts.slice(0, 5);
-
-        const bestTimesHtml = top5.map(t =>
-          `<li><span>${t.timeText}</span><span>(${t.count} people)</span></li>`
-        ).join('');
-
-        const allAvailHtml = data.availabilities.map(u =>
-          `<li><b>${u.name}:</b> ${u.availability.join(', ')}</li>`
-        ).join('');
-
-        resultsDiv.innerHTML = `
-          <h2>Top 5 Best Times to Meet:</h2>
-          <ul class="best-times">${bestTimesHtml}</ul>
-          <h2>All Submissions:</h2>
-          <ul>${allAvailHtml}</ul>
-        `;
-      } catch {
-        resultsDiv.innerHTML = '<h2>Error loading availability.</h2>';
-      }
+    } catch {
+      resultsDiv.innerHTML = '<h2>Error loading availability.</h2>';
     }
+  }
 
-    resetBtn.addEventListener('click', async () => {
-      const password = prompt('Enter admin password to reset all availability:');
-      if (!password) return;
-      try {
-        const res = await fetch('/reset', {
-          method: 'POST',
-          headers: { 'Content-Type': 'application/json' },
-          body: JSON.stringify({ password })
-        });
-        const data = await res.json();
-        alert(data.message || data.error);
-        if (!data.error) loadResults();
-      } catch {
-        alert('Error resetting availability.');
-      }
-    });
+  loadResults();
 
-    loadResults();
-  </script>
+  resetBtn.addEventListener('click', async () => {
+    const password = prompt('Enter admin password to reset all availability:');
+    if (!password) return;
+    try {
+      const res = await fetch('/reset', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ password }),
+      });
+      const data = await res.json();
+      alert(data.message || data.error);
+      if (!data.error) loadResults();
+    } catch {
+      alert('Error resetting availability.');
+    }
+  });
+</script>
 </body>
 </html>
