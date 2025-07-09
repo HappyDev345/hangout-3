@@ -51,10 +51,11 @@ app.get('/results', async (req, res) => {
     availability.forEach(slot => counts[slot] = (counts[slot] || 0) + 1);
   });
 
-  const bestTimes = Object.entries(counts)
-    .sort((a, b) => b[1] - a[1]) // Sort by number of people descending
-    .slice(0, 5) // Only top 5
-    .map(([slot, count]) => `${slot} (${count} people)`);
+  const sortedTimes = Object.entries(counts)
+    .sort((a, b) => b[1] - a[1]) // sort by count descending
+    .slice(0, 5); // take top 5
+
+  const bestTimes = sortedTimes.map(([slot, count]) => ({ slot, count }));
 
   res.json({ bestTimes, availabilities: all });
 });
