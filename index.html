@@ -1,265 +1,229 @@
 <!DOCTYPE html>
-<html lang="en">
+<html>
 <head>
-<meta charset="UTF-8" />
-<meta name="viewport" content="width=device-width, initial-scale=1" />
-<title>Group Availability Scheduler</title>
-<style>
-  body {
-    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-    max-width: 900px;
-    margin: 20px auto;
-    padding: 0 15px;
-    background: #f9f9f9;
-    color: #333;
-  }
-  h1 {
-    text-align: center;
-    color: #00796b;
-  }
-  form {
-    margin-bottom: 30px;
-  }
-  .day-block {
-    margin-bottom: 25px;
-    border: 1px solid #ddd;
-    border-radius: 8px;
-    background: white;
-    padding: 12px 15px;
-    box-shadow: 0 2px 6px rgb(0 0 0 / 0.1);
-  }
-  .day-title {
-    font-weight: 700;
-    margin-bottom: 10px;
-    color: #004d40;
-  }
-  .time-blocks {
-    display: flex;
-    gap: 10px;
-    flex-wrap: wrap;
-  }
-  .time-label {
-    flex: 1 1 110px;
-    padding: 8px 12px;
-    background: #e0f2f1;
-    border-radius: 6px;
-    cursor: pointer;
-    user-select: none;
-    text-align: center;
-    border: 2px solid transparent;
-    transition: background-color 0.3s, border-color 0.3s;
-    font-weight: 600;
-    color: #004d40;
-  }
-  .time-label:hover {
-    background: #b2dfdb;
-  }
-  input[type="checkbox"] {
-    display: none;
-  }
-  input[type="checkbox"]:checked + .time-label {
-    background: #00796b;
-    color: white;
-    border-color: #004d40;
-  }
-  #name {
-    width: 100%;
-    max-width: 320px;
-    padding: 8px 12px;
-    font-size: 16px;
-    margin-bottom: 15px;
-    border: 1.5px solid #ccc;
-    border-radius: 6px;
-    outline-offset: 2px;
-    transition: border-color 0.3s;
-  }
-  #name:focus {
-    border-color: #00796b;
-  }
-  button {
-    padding: 12px 22px;
-    font-size: 18px;
-    border: none;
-    border-radius: 8px;
-    background: #00796b;
-    color: white;
-    cursor: pointer;
-    font-weight: 700;
-    box-shadow: 0 3px 7px rgb(0 121 107 / 0.6);
-    transition: background-color 0.3s;
-  }
-  button:hover {
-    background: #004d40;
-  }
-  #results {
-    margin-top: 30px;
-    background: white;
-    padding: 20px 25px;
-    border-radius: 8px;
-    box-shadow: 0 2px 6px rgb(0 0 0 / 0.1);
-  }
-  ul {
-    padding-left: 20px;
-  }
-  .best-times li {
-    color: #00796b;
-    font-weight: 700;
-    margin-bottom: 6px;
-  }
-  .admin {
-    margin-top: 40px;
-    border-top: 1px solid #ccc;
-    padding-top: 20px;
-    text-align: center;
-  }
-  .admin button {
-    background: #c62828;
-    box-shadow: 0 3px 7px rgb(198 40 40 / 0.6);
-  }
-  .admin button:hover {
-    background: #8e0000;
-  }
-</style>
+  <title>Group Scheduler</title>
+  <style>
+    body { font-family: sans-serif; max-width: 900px; margin: 20px auto; padding: 20px; }
+    table, td, th {
+      border: 1px solid #ccc;
+      border-collapse: collapse;
+      padding: 5px;
+      text-align: center;
+      font-size: 14px;
+    }
+    table {
+      width: 100%;
+      margin-bottom: 20px;
+    }
+    input[type="checkbox"] {
+      transform: scale(1.2);
+      cursor: pointer;
+    }
+    #results {
+      font-family: Arial, sans-serif;
+      background: #f9f9f9;
+      padding: 10px;
+      border-radius: 5px;
+      max-height: 300px;
+      overflow-y: auto;
+      margin-top: 10px;
+    }
+    .highlight {
+      background-color: #d4edda;
+      font-weight: bold;
+    }
+    button {
+      padding: 6px 12px;
+      cursor: pointer;
+      font-size: 14px;
+    }
+    #resetBtn {
+      margin-left: 10px;
+      background: #e74c3c;
+      color: white;
+      border: none;
+    }
+  </style>
 </head>
 <body>
-  <h1>Group Availability Scheduler</h1>
-  <form id="availability-form">
-    <input type="text" id="name" placeholder="Enter your name" required />
-    <div id="timeslots-container"></div>
-    <button type="submit">Submit Availability</button>
-  </form>
+  <h2>🗓️ When Are You Free? (July 7 - July 20, 2025)</h2>
+  <input id="name" placeholder="Your name" /><br><br>
 
-  <div id="results">
-    <h2>Loading availability...</h2>
-  </div>
+  <table id="timetable">
+    <thead>
+      <tr>
+        <th>Time</th>
+        <th>Mon 7 Jul</th>
+        <th>Tue 8 Jul</th>
+        <th>Wed 9 Jul</th>
+        <th>Thu 10 Jul</th>
+        <th>Fri 11 Jul</th>
+        <th>Sat 12 Jul</th>
+        <th>Sun 13 Jul</th>
+        <th>Mon 14 Jul</th>
+        <th>Tue 15 Jul</th>
+        <th>Wed 16 Jul</th>
+        <th>Thu 17 Jul</th>
+        <th>Fri 18 Jul</th>
+        <th>Sat 19 Jul</th>
+        <th>Sun 20 Jul</th>
+      </tr>
+    </thead>
+    <tbody>
+      <!-- JS will generate rows here -->
+    </tbody>
+  </table>
 
-  <div class="admin">
-    <button id="reset-btn">Reset All Availability (Admin Only)</button>
-  </div>
+  <button onclick="submit()">Submit</button>
+  <button id="resetBtn" onclick="resetResponses()">Reset All</button>
 
-<script>
-  const timeslotsContainer = document.getElementById('timeslots-container');
-  const startDate = new Date(2025, 6, 9); // July 9, 2025
-  const endDate = new Date(2025, 6, 27); // July 27, 2025
-  const twoHourBlocks = [
-    '10 AM - 12 PM',
-    '12 PM - 2 PM',
-    '2 PM - 4 PM',
-    '4 PM - 6 PM',
-  ];
+  <h3>📊 Group Availability</h3>
+  <div id="results">Loading...</div>
 
-  function formatDate(d) {
-    return d.toLocaleDateString('en-GB', { weekday: 'long', day: 'numeric', month: 'short' });
-  }
+  <script>
+    // Dates and labels for July 7-20, 2025
+    const dates = [
+      "2025-07-07", "2025-07-08", "2025-07-09", "2025-07-10", "2025-07-11",
+      "2025-07-12", "2025-07-13", "2025-07-14", "2025-07-15", "2025-07-16",
+      "2025-07-17", "2025-07-18", "2025-07-19", "2025-07-20"
+    ];
 
-  // Create day sections with 2-hour blocks
-  for (let d = new Date(startDate); d <= endDate; d.setDate(d.getDate() + 1)) {
-    const dayBlock = document.createElement('div');
-    dayBlock.className = 'day-block';
+    const dateLabels = [
+      "Mon 7 Jul", "Tue 8 Jul", "Wed 9 Jul", "Thu 10 Jul", "Fri 11 Jul",
+      "Sat 12 Jul", "Sun 13 Jul", "Mon 14 Jul", "Tue 15 Jul", "Wed 16 Jul",
+      "Thu 17 Jul", "Fri 18 Jul", "Sat 19 Jul", "Sun 20 Jul"
+    ];
 
-    const dayTitle = document.createElement('div');
-    dayTitle.className = 'day-title';
-    dayTitle.textContent = formatDate(new Date(d));
-    dayBlock.appendChild(dayTitle);
+    // Generate timetable rows (9am to 6pm)
+    const tbody = document.querySelector("#timetable tbody");
+    const startHour = 9;
+    const endHour = 17; // 5pm block ends at 6pm
 
-    const timeBlocksDiv = document.createElement('div');
-    timeBlocksDiv.className = 'time-blocks';
-
-    twoHourBlocks.forEach(block => {
-      const slotValue = `${formatDate(new Date(d))} ${block}`;
-
-      const checkbox = document.createElement('input');
-      checkbox.type = 'checkbox';
-      checkbox.id = slotValue;
-      checkbox.name = 'availability';
-      checkbox.value = slotValue;
-
-      const label = document.createElement('label');
-      label.className = 'time-label';
-      label.htmlFor = slotValue;
-      label.textContent = block;
-
-      timeBlocksDiv.appendChild(checkbox);
-      timeBlocksDiv.appendChild(label);
-    });
-
-    dayBlock.appendChild(timeBlocksDiv);
-    timeslotsContainer.appendChild(dayBlock);
-  }
-
-  const form = document.getElementById('availability-form');
-  const resultsDiv = document.getElementById('results');
-  const resetBtn = document.getElementById('reset-btn');
-
-  form.addEventListener('submit', async (e) => {
-    e.preventDefault();
-    const name = document.getElementById('name').value.trim();
-    const checkedBoxes = [...document.querySelectorAll('input[name="availability"]:checked')];
-    if (!name) {
-      alert('Please enter your name.');
-      return;
+    function formatHour(hour) {
+      if (hour === 12) return "12pm";
+      if (hour > 12) return (hour - 12) + "pm";
+      return hour + "am";
     }
-    if (checkedBoxes.length === 0) {
-      alert('Please select at least one time block.');
-      return;
+
+    for (let hour = startHour; hour <= endHour; hour++) {
+      const row = document.createElement("tr");
+
+      const timeCell = document.createElement("td");
+      const nextHour = hour + 1;
+      timeCell.textContent = `${formatHour(hour)} - ${formatHour(nextHour)}`;
+      row.appendChild(timeCell);
+
+      for (const date of dates) {
+        const cell = document.createElement("td");
+        const input = document.createElement("input");
+        input.type = "checkbox";
+        input.className = "slot";
+        input.value = `${date}-${hour}`;
+        cell.appendChild(input);
+        row.appendChild(cell);
+      }
+
+      tbody.appendChild(row);
     }
-    const availability = checkedBoxes.map(cb => cb.value);
-    try {
-      const res = await fetch('/submit', {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ name, availability }),
-      });
+
+    // Turn slot into friendly text like "Wed 9 Jul, 10am - 11am"
+    function slotToFriendlyText(slot) {
+      const parts = slot.split("-");
+      if(parts.length !== 4) return slot;
+
+      const dateStr = parts.slice(0,3).join("-");
+      const hour = parseInt(parts[3]);
+
+      const dateIndex = dates.indexOf(dateStr);
+      if(dateIndex === -1) return slot;
+
+      const dayLabel = dateLabels[dateIndex];
+      const nextHour = hour + 1;
+
+      function formatHourLocal(h) {
+        if (h === 12) return "12pm";
+        if (h > 12) return (h - 12) + "pm";
+        return h + "am";
+      }
+
+      return `${dayLabel}, ${formatHourLocal(hour)} - ${formatHourLocal(nextHour)}`;
+    }
+
+    async function getAvailability() {
+      const res = await fetch('/get');
       const data = await res.json();
-      alert(data.message);
-      form.reset();
-      loadResults();
-    } catch (err) {
-      alert('Error submitting availability');
-    }
-  });
+      const counts = {};
 
-  async function loadResults() {
-    try {
-      const res = await fetch('/results');
-      const data = await res.json();
-      if (data.bestTimes.length === 0) {
-        resultsDiv.innerHTML = '<h2>No availability submitted yet.</h2>';
+      for (const user in data) {
+        data[user].forEach(slot => {
+          counts[slot] = (counts[slot] || 0) + 1;
+        });
+      }
+
+      let maxCount = 0;
+      for (const slot in counts) {
+        if (counts[slot] > maxCount) maxCount = counts[slot];
+      }
+
+      if(maxCount === 0) {
+        document.getElementById('results').textContent = "No submissions yet.";
         return;
       }
-      const bestTimesHtml = data.bestTimes.map(t => `<li>${t}</li>`).join('');
-      const allAvailHtml = data.availabilities.map(u =>
-        `<li><b>${u.name}:</b> ${u.availability.join(', ')}</li>`
-      ).join('');
-      resultsDiv.innerHTML = `
-        <h2>Best Times to Meet:</h2>
-        <ul class="best-times">${bestTimesHtml}</ul>
-        <h2>All Submissions:</h2>
-        <ul>${allAvailHtml}</ul>
-      `;
-    } catch {
-      resultsDiv.innerHTML = '<h2>Error loading availability.</h2>';
+
+      let html = `<table style="border-collapse: collapse; width: 100%;">
+        <tr><th style="border: 1px solid #ccc; padding: 5px;">Time Slot</th><th style="border: 1px solid #ccc; padding: 5px;">People Free</th></tr>`;
+
+      for(const slot in counts) {
+        const friendly = slotToFriendlyText(slot);
+        const highlightClass = counts[slot] === maxCount ? "highlight" : "";
+        html += `<tr class="${highlightClass}"><td style="border: 1px solid #ccc; padding: 5px;">${friendly}</td><td style="border: 1px solid #ccc; padding: 5px; text-align: center;">${counts[slot]}</td></tr>`;
+      }
+
+      html += `</table>`;
+
+      const bestSlots = Object.keys(counts).filter(s => counts[s] === maxCount)
+                                           .map(slotToFriendlyText);
+
+      html += `<p><strong>Best time(s) for everyone:</strong><br>${bestSlots.join("<br>")}</p>`;
+
+      document.getElementById('results').innerHTML = html;
     }
-  }
 
-  loadResults();
+    async function submit() {
+      const name = document.getElementById('name').value.trim();
+      if (!name) {
+        alert("Please enter your name!");
+        return;
+      }
 
-  resetBtn.addEventListener('click', async () => {
-    const password = prompt('Enter admin password to reset all availability:');
-    if (!password) return;
-    try {
-      const res = await fetch('/reset', {
+      const selectedSlots = Array.from(document.querySelectorAll('.slot:checked'))
+                                .map(cb => cb.value);
+
+      if (selectedSlots.length === 0) {
+        alert("Please select at least one time slot!");
+        return;
+      }
+
+      await fetch('/submit', {
         method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ password }),
+        headers: {'Content-Type': 'application/json'},
+        body: JSON.stringify({ name, slots: selectedSlots })
       });
-      const data = await res.json();
-      alert(data.message || data.error);
-      if (!data.error) loadResults();
-    } catch {
-      alert('Error resetting availability.');
+
+      getAvailability();
     }
-  });
-</script>
+
+    async function resetResponses() {
+      if (!confirm('Are you sure you want to reset ALL responses?')) return;
+
+      await fetch('/reset', { method: 'POST' });
+
+      alert('All responses have been reset.');
+
+      getAvailability();
+    }
+
+    getAvailability();
+  </script>
 </body>
 </html>
