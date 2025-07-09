@@ -1,12 +1,12 @@
 {
   "name": "group-scheduler",
   "version": "1.0.0",
-  "description": "Simple group availability scheduler",
-  "main": "server.js",
+  "type": "module",
   "scripts": {
     "start": "node server.js"
   },
   "dependencies": {
-    "express": "^4.18.2"
+    "express": "^4.21.2",
+    "mongodb": "^6.5.0"
   }
 }
