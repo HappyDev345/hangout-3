@@ -1,11 +1,41 @@
 import express from 'express';
 import path from 'path';
 import { fileURLToPath } from 'url';
+import fs from 'fs';
 
 const app = express();
 const port = process.env.PORT || 3000;
 
 const ADMIN_PASSWORD = process.env.ADMIN_PASSWORD || 'secret123';
+
+const DATA_FILE = './data.json';
+let availabilities = [];
+
+availabilities = [];
+saveData(); // Add this line
+
+// Load data from a file when the server starts
+if (fs.existsSync(DATA_FILE)) {
+  try {
+    const fileContent = fs.readFileSync(DATA_FILE, 'utf-8');
+    availabilities = JSON.parse(fileContent);
+    console.log('Loaded availability data from file.');
+  } catch (err) {
+    console.error('Error reading data file:', err);
+  }
+}
+
+// Add a function to save data to the file
+function saveData() {
+  fs.writeFileSync(DATA_FILE, JSON.stringify(availabilities, null, 2));
+}
+
+// Call saveData() after updating or resetting availability
+In your /submit route:
+if (i >= 0) availabilities[i] = { name, availability };
+else availabilities.push({ name, availability });
+saveData(); // Add this line
+
 
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
