@@ -1,11 +1,13 @@
 import express from 'express';
 import path from 'path';
+import { MongoClient } from 'mongodb';
 import { fileURLToPath } from 'url';
-import fs from 'fs';
 
 const app = express();
 const port = process.env.PORT || 3000;
+
 const ADMIN_PASSWORD = process.env.ADMIN_PASSWORD || 'secret123';
+const MONGO_URI = 'mongodb+srv://gamingbrothers337:5r6VmyqZgIcspJUx@cluster4.abbtlhi.mongodb.net/?retryWrites=true&w=majority&appName=Cluster4';
 
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
@@ -13,74 +15,58 @@ const __dirname = path.dirname(__filename);
 app.use(express.json());
 app.use(express.static(path.join(__dirname, 'public')));
 
-const DATA_FILE = './data.json';
-let availabilities = [];
+let db, collection;
 
-// Load saved data on startup
-if (fs.existsSync(DATA_FILE)) {
-  try {
-    const fileContent = fs.readFileSync(DATA_FILE, 'utf-8');
-    availabilities = JSON.parse(fileContent);
-    console.log('✅ Loaded availability data from file.');
-  } catch (err) {
-    console.error('❌ Error reading data file:', err);
-  }
-}
-
-// Function to save data
-function saveData() {
-  fs.writeFileSync(DATA_FILE, JSON.stringify(availabilities, null, 2));
-}
+MongoClient.connect(MONGO_URI)
+  .then(client => {
+    db = client.db('scheduler');
+    collection = db.collection('availabilities');
+    console.log('✅ Connected to MongoDB');
+  })
+  .catch(err => console.error('❌ MongoDB connection error:', err));
 
 // Submit availability
-app.post('/submit', (req, res) => {
+app.post('/submit', async (req, res) => {
   const { name, availability } = req.body;
-  if (!name || !availability || !Array.isArray(availability)) {
-    return res.status(400).json({ error: 'Invalid input' });
-  }
+  if (!name || !Array.isArray(availability)) return res.status(400).json({ error: 'Invalid input' });
 
-  const i = availabilities.findIndex(a => a.name === name);
-  if (i >= 0) availabilities[i] = { name, availability };
-  else availabilities.push({ name, availability });
+  await collection.updateOne(
+    { name },
+    { $set: { name, availability } },
+    { upsert: true }
+  );
 
-  saveData();
   res.json({ message: 'Availability saved' });
 });
 
-// Get results with best times
-app.get('/results', (req, res) => {
-  if (availabilities.length === 0) {
-    return res.json({ bestTimes: [], availabilities });
-  }
+// Get results
+app.get('/results', async (req, res) => {
+  const all = await collection.find().toArray();
+  if (all.length === 0) return res.json({ bestTimes: [], availabilities: [] });
 
   const counts = {};
-  availabilities.forEach(({ availability }) => {
-    availability.forEach(slot => {
-      counts[slot] = (counts[slot] || 0) + 1;
-    });
+  all.forEach(({ availability }) => {
+    availability.forEach(slot => counts[slot] = (counts[slot] || 0) + 1);
   });
 
   const maxCount = Math.max(...Object.values(counts));
   const bestTimes = Object.entries(counts)
-    .filter(([, c]) => c === maxCount)
+    .filter(([, count]) => count === maxCount)
     .map(([slot]) => slot);
 
-  res.json({ bestTimes, availabilities });
+  res.json({ bestTimes, availabilities: all });
 });
 
-// Reset all data (password protected)
-app.post('/reset', (req, res) => {
+// Reset all data
+app.post('/reset', async (req, res) => {
   const { password } = req.body;
-  if (password !== ADMIN_PASSWORD) {
-    return res.status(403).json({ error: 'Wrong password' });
-  }
+  if (password !== ADMIN_PASSWORD) return res.status(403).json({ error: 'Wrong password' });
 
-  availabilities = [];
-  saveData();
+  await collection.deleteMany({});
   res.json({ message: 'All availability reset' });
 });
 
-// Fallback to index.html
+// Serve the frontend
 app.get('*', (req, res) => {
   res.sendFile(path.join(__dirname, 'public/index.html'));
 });
