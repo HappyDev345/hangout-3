@@ -1,3 +1,5 @@
+/// ✅ server.js (Updated to show Top 5 ranked best times)
+
 import express from 'express';
 import path from 'path';
 import { MongoClient } from 'mongodb';
@@ -39,7 +41,7 @@ app.post('/submit', async (req, res) => {
   res.json({ message: 'Availability saved' });
 });
 
-// Get results
+// Get results - Top 5 ranked by how many people are free
 app.get('/results', async (req, res) => {
   const all = await collection.find().toArray();
   if (all.length === 0) return res.json({ bestTimes: [], availabilities: [] });
@@ -49,10 +51,10 @@ app.get('/results', async (req, res) => {
     availability.forEach(slot => counts[slot] = (counts[slot] || 0) + 1);
   });
 
-  const maxCount = Math.max(...Object.values(counts));
   const bestTimes = Object.entries(counts)
-    .filter(([, count]) => count === maxCount)
-    .map(([slot]) => slot);
+    .sort((a, b) => b[1] - a[1]) // Sort by number of people descending
+    .slice(0, 5) // Only top 5
+    .map(([slot, count]) => `${slot} (${count} people)`);
 
   res.json({ bestTimes, availabilities: all });
 });
@@ -66,7 +68,7 @@ app.post('/reset', async (req, res) => {
   res.json({ message: 'All availability reset' });
 });
 
-// Serve the frontend
+// Serve frontend
 app.get('*', (req, res) => {
   res.sendFile(path.join(__dirname, 'public/index.html'));
 });
