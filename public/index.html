@@ -134,6 +134,28 @@
       margin-top: 5px;
       color: #333;
     }
+    .footer {
+      text-align: center;
+      margin-top: 50px;
+      padding: 20px 10px;
+      color: #888;
+      font-size: 14px;
+    }
+    .status-button {
+      display: inline-block;
+      margin-top: 15px;
+      padding: 10px 20px;
+      border-radius: 6px;
+      background: #00796b;
+      color: white;
+      font-weight: bold;
+      text-decoration: none;
+      box-shadow: 0 3px 6px rgb(0 121 107 / 0.4);
+      transition: background 0.3s;
+    }
+    .status-button:hover {
+      background: #004d40;
+    }
   </style>
 </head>
 <body>
@@ -152,6 +174,11 @@
     <button id="reset-btn">Reset All Availability (Luke Only)</button>
   </div>
 
+  <div class="footer">
+    <p>Everything running smoothly? Check the status:</p>
+    <a class="status-button" href="https://hangout.betteruptime.com" target="_blank">📊 View Live Status</a>
+  </div>
+
   <script>
     const timeslotsContainer = document.getElementById('timeslots-container');
     const startDate = new Date(2025, 6, 9); // July 9, 2025
@@ -167,7 +194,6 @@
       return d.toLocaleDateString('en-GB', { weekday: 'long', day: 'numeric', month: 'short' });
     }
 
-    // Create day sections with 2-hour blocks
     for (let d = new Date(startDate); d <= endDate; d.setDate(d.getDate() + 1)) {
       const dayBlock = document.createElement('div');
       dayBlock.className = 'day-block';
@@ -210,14 +236,9 @@
       e.preventDefault();
       const name = document.getElementById('name').value.trim();
       const checkedBoxes = [...document.querySelectorAll('input[name="availability"]:checked')];
-      if (!name) {
-        alert('Please enter your name.');
-        return;
-      }
-      if (checkedBoxes.length === 0) {
-        alert('Please select at least one time block.');
-        return;
-      }
+      if (!name) return alert('Please enter your name.');
+      if (checkedBoxes.length === 0) return alert('Please select at least one time block.');
+
       const availability = checkedBoxes.map(cb => cb.value);
       try {
         const res = await fetch('/submit', {
@@ -229,7 +250,7 @@
         alert(data.message);
         form.reset();
         loadResults();
-      } catch (err) {
+      } catch {
         alert('Error submitting availability! Please contact Luke');
       }
     });
