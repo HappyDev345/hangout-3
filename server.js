@@ -39,7 +39,7 @@ app.post('/submit', async (req, res) => {
   res.json({ message: 'Availability saved' });
 });
 
-// Get results - Top 5 ranked by how many people are free
+// Get results
 app.get('/results', async (req, res) => {
   const all = await collection.find().toArray();
   if (all.length === 0) return res.json({ bestTimes: [], availabilities: [] });
@@ -50,15 +50,15 @@ app.get('/results', async (req, res) => {
   });
 
   const sortedTimes = Object.entries(counts)
-    .sort((a, b) => b[1] - a[1]) // sort by count descending
-    .slice(0, 5); // take top 5
+    .sort((a, b) => b[1] - a[1])
+    .slice(0, 5);
 
   const bestTimes = sortedTimes.map(([slot, count]) => ({ slot, count }));
 
   res.json({ bestTimes, availabilities: all });
 });
 
-// Reset all data
+// Reset
 app.post('/reset', async (req, res) => {
   const { password } = req.body;
   if (password !== ADMIN_PASSWORD) return res.status(403).json({ error: 'Wrong password' });
@@ -67,21 +67,19 @@ app.post('/reset', async (req, res) => {
   res.json({ message: 'All availability reset' });
 });
 
-// Serve frontend
-app.get('*', (req, res) => {
-  res.sendFile(path.join(__dirname, 'public/index.html'));
-});
-
-// ✅ HEALTH CHECK — Used by Better Uptime
+// ✅ Health check route (must come BEFORE wildcard route)
 app.get('/health', async (req, res) => {
   try {
-    // Ping the MongoDB collection to verify connectivity
     const count = await collection.countDocuments();
-    res.status(200).json({ status: 'ok', dbConnected: true, userCount: count });
+    res.json({ status: 'ok', dbConnected: true, userCount: count });
   } catch (err) {
-    console.error('❌ Health check failed:', err);
     res.status(500).json({ status: 'error', dbConnected: false });
   }
+});
+
+// Wildcard route (put LAST)
+app.get('*', (req, res) => {
+  res.sendFile(path.join(__dirname, 'public/index.html'));
 });
 
 app.listen(port, () => {
