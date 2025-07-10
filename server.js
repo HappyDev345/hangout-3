@@ -67,17 +67,16 @@ app.post('/reset', async (req, res) => {
   res.json({ message: 'All availability reset' });
 });
 
-// ✅ Health check route (must come BEFORE wildcard route)
-app.get('/health', async (req, res) => {
-  try {
-    const count = await collection.countDocuments();
-    res.json({ status: 'ok', dbConnected: true, userCount: count });
-  } catch (err) {
-    res.status(500).json({ status: 'error', dbConnected: false });
-  }
+// ❌ Simulated failure for /health route (for testing Better Uptime alerts)
+app.get('/health', (req, res) => {
+  res.status(500).json({
+    status: 'error',
+    dbConnected: false,
+    message: 'Simulated failure for monitoring test'
+  });
 });
 
-// Wildcard route (put LAST)
+// Wildcard route
 app.get('*', (req, res) => {
   res.sendFile(path.join(__dirname, 'public/index.html'));
 });
