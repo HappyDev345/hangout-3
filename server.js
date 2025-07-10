@@ -1,5 +1,3 @@
-/// ✅ server.js (Updated to show Top 5 ranked best times)
-
 import express from 'express';
 import path from 'path';
 import { MongoClient } from 'mongodb';
@@ -74,13 +72,18 @@ app.get('*', (req, res) => {
   res.sendFile(path.join(__dirname, 'public/index.html'));
 });
 
+// ✅ HEALTH CHECK — Used by Better Uptime
+app.get('/health', async (req, res) => {
+  try {
+    // Ping the MongoDB collection to verify connectivity
+    const count = await collection.countDocuments();
+    res.status(200).json({ status: 'ok', dbConnected: true, userCount: count });
+  } catch (err) {
+    console.error('❌ Health check failed:', err);
+    res.status(500).json({ status: 'error', dbConnected: false });
+  }
+});
+
 app.listen(port, () => {
   console.log(`🚀 Server listening on port ${port}`);
 });
-
-// STATUS PAGE (intentionally broken for testing)
-app.get('/health', (req, res) => {
-  // Simulate an internal error
-  res.status(500).json({ status: 'error', dbConnected: false, message: 'Simulated failure' });
-});
-
