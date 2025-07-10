@@ -77,3 +77,15 @@ app.get('*', (req, res) => {
 app.listen(port, () => {
   console.log(`🚀 Server listening on port ${port}`);
 });
+
+// STATUS PAGE
+app.get('/health', async (req, res) => {
+  try {
+    // Check MongoDB connection
+    const count = await collection.countDocuments(); // triggers DB
+    res.json({ status: 'ok', dbConnected: true, userCount: count });
+  } catch (err) {
+    console.error('Health check failed:', err);
+    res.status(500).json({ status: 'error', dbConnected: false });
+  }
+});
