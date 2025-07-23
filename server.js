@@ -1,3 +1,5 @@
+// === UPDATED server.js ===
+
 import express from 'express';
 import path from 'path';
 import { MongoClient } from 'mongodb';
@@ -44,9 +46,15 @@ app.get('/results', async (req, res) => {
   const all = await collection.find().toArray();
   if (all.length === 0) return res.json({ bestTimes: [], availabilities: [] });
 
+  const now = new Date();
   const counts = {};
   all.forEach(({ availability }) => {
-    availability.forEach(slot => counts[slot] = (counts[slot] || 0) + 1);
+    availability.forEach(slot => {
+      const slotDate = new Date(slot.split(' ').slice(0, 3).join(' '));
+      if (!isNaN(slotDate) && slotDate >= now) {
+        counts[slot] = (counts[slot] || 0) + 1;
+      }
+    });
   });
 
   const sortedTimes = Object.entries(counts)
@@ -67,7 +75,7 @@ app.post('/reset', async (req, res) => {
   res.json({ message: 'All availability reset' });
 });
 
-// ✅ Health check route (working version)
+// ✅ Health check route
 app.get('/health', async (req, res) => {
   try {
     const count = await collection.countDocuments();
