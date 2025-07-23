@@ -159,6 +159,21 @@
   </style>
 </head>
 <body>
+
+  <!-- ✅ Announcement Banner -->
+  <div id="announcement" style="
+    background-color: #ffeb3b;
+    color: #333;
+    text-align: center;
+    padding: 12px 20px;
+    font-weight: bold;
+    font-size: 1rem;
+    border-bottom: 2px solid #fbc02d;
+    box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+  ">
+    📢 <span id="announcement-text">New update: Submit your availability by Friday 5PM!</span>
+  </div>
+
   <h1>Group Availability Scheduler</h1>
   <form id="availability-form">
     <input type="text" id="name" placeholder="Enter your name" required />
@@ -178,6 +193,8 @@
     <p>Everything running smoothly? Check the status:</p>
     <a class="status-button" href="https://lukes.betteruptime.com/" target="_blank">📊 View Live Status</a>
   </div>
+</body>
+</html>
 
   <script>
     const timeslotsContainer = document.getElementById('timeslots-container');
